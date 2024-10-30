@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-app-1730281629
+  namespace: shir3
+  annotations:
+    app.kubernetes.io/instance: flask-app-1730281629
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-app-1730281629
+  template:
+    metadata:
+      labels:
+        app: flask-app-1730281629
+        developer: shir3
+    spec:
+      containers:
+      - name: flask-app
+        image: shirbenyosef1/flask_app
+        ports:
+        - containerPort: 5000
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "200m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-app-1730281629
+  namespace: shir3
+spec:
+  type: NodePort
+  ports:
+  - port: 5000
+    targetPort: 5000
+    nodePort: 31319  # Specify the nodePort explicitly
+  selector:
+    app: flask-app-1730281629
